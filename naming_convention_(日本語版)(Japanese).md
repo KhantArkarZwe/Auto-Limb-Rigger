@@ -1,19 +1,19 @@
 # Naming Convention — metaTools Auto Limb Rigger v0.2
 
-This document explains the expected naming convention for the Auto Limb Rigger.
+このドキュメントでは、Auto Limb Riggerで想定している命名規則を説明します。
 
-The tool relies on strict object names because it checks joints, controllers, and switch attributes before building the rig.
+このツールは、リグ作成前にジョイント、コントローラー、スイッチ属性を確認するため、厳密なオブジェクト名に依存しています。
 
 ## Side Prefix
 
-Every limb root and controller must start with one of these side prefixes:
+全てのリムルートとコントローラーは、以下のいずれかのside prefixで始まる必要があります。
 
 | Side | Prefix |
 |---|---|
 | Left | `L_` |
 | Right | `R_` |
 
-Example:
+例:
 
 ```text
 L_shoulder
@@ -26,13 +26,13 @@ R_knee_FK_ctrl
 
 ### Biped Arm
 
-The selected root joint must end with:
+選択するルートジョイントは、以下で終わる必要があります。
 
 ```text
 _shoulder
 ```
 
-Expected chain:
+想定チェーン:
 
 ```text
 L_shoulder
@@ -40,7 +40,7 @@ L_shoulder
     └── L_wrist
 ```
 
-Right side:
+右側:
 
 ```text
 R_shoulder
@@ -50,13 +50,13 @@ R_shoulder
 
 ### Biped Leg
 
-The selected root joint must end with:
+選択するルートジョイントは、以下で終わる必要があります。
 
 ```text
 _hip
 ```
 
-Expected source chain:
+想定ソースチェーン:
 
 ```text
 L_hip
@@ -66,7 +66,7 @@ L_hip
             └── L_tiptoe
 ```
 
-Right side:
+右側:
 
 ```text
 R_hip
@@ -80,13 +80,13 @@ R_hip
 
 ### Quadruped Front Limb
 
-The selected root joint must end with:
+選択するルートジョイントは、以下で終わる必要があります。
 
 ```text
 _humerus
 ```
 
-Expected chain:
+想定チェーン:
 
 ```text
 L_humerus
@@ -96,7 +96,7 @@ L_humerus
             └── L_phalanges
 ```
 
-Right side:
+右側:
 
 ```text
 R_humerus
@@ -108,13 +108,13 @@ R_humerus
 
 ### Quadruped Rear Limb
 
-The selected root joint must end with:
+選択するルートジョイントは、以下で終わる必要があります。
 
 ```text
 _femur
 ```
 
-Expected chain:
+想定チェーン:
 
 ```text
 L_femur
@@ -124,7 +124,7 @@ L_femur
             └── L_phalanges
 ```
 
-Right side:
+右側:
 
 ```text
 R_femur
@@ -260,30 +260,30 @@ R_Rear_IKFKswitch_ctrl
 
 ## FK Offset Group Naming
 
-Each FK controller, except the root FK controller, is expected to have an offset group named:
+ルートFKコントローラーを除き、各FKコントローラーには以下の名前のオフセットグループが必要です。
 
 ```text
 <FK_controller_name>_off
 ```
 
-Example:
+例:
 
 ```text
 L_elbow_FK_ctrl_off
 L_wrist_FK_ctrl_off
 ```
 
-The tool parents child FK offset groups under the previous FK controller to form the FK hierarchy.
+ツールは、子FKオフセットグループを前のFKコントローラーの下にペアレントし、FK階層を形成します。
 
 ## IK/FK Switch Attribute
 
-Each IK/FK switch controller must contain this attribute:
+各IK/FKスイッチコントローラーには、以下の属性が必要です。
 
 ```text
 IKFKswitch
 ```
 
-Requirements:
+要件:
 
 | Requirement | Value |
 |---|---|
@@ -291,10 +291,10 @@ Requirements:
 | Type | float or double |
 | Minimum | `0` |
 | Maximum | `1` |
-| `0` | IK mode |
-| `1` | FK mode |
+| IK mode | `0` |
+| FK mode | `1` |
 
-Example controller:
+コントローラー例:
 
 ```text
 L_Arm_IKFKswitch_ctrl.IKFKswitch
@@ -302,7 +302,7 @@ L_Arm_IKFKswitch_ctrl.IKFKswitch
 
 ## Generated Names
 
-The tool creates new joints by adding suffixes to the source joint names.
+ツールは、ソースジョイント名にサフィックスを追加して新しいジョイントを作成します。
 
 ### Biped
 
@@ -319,4 +319,4 @@ The tool creates new joints by adding suffixes to the source joint names.
 <source_joint>_FK
 ```
 
-The tool will stop if a generated joint name already exists.
+生成されるジョイント名が既に存在する場合、ツールは停止します。
