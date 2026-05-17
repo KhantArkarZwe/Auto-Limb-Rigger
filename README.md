@@ -1,108 +1,107 @@
 # metaTools Auto Limb Rigger v0.2
 
-A Maya Python tool that automates IK/FK limb setup for biped and quadruped rigs.
+二足・四足リグのIK/FKリムセットアップを自動化する、Maya Pythonツールです。
 
-The tool was built to reduce repetitive rigging work, keep limb rig structures consistent, and make it faster to create IK/FK blended limb systems inside Maya.
+このツールは、繰り返し発生するリギング作業を減らし、リムリグ構造を一定に保ち、Maya内でIK/FKブレンドリムシステムをより早く作成するために制作しました。
 
+## 主な機能
 
-## Main Features
+- 選択したバインド／ソースリムチェーンから、IK用・FK用の複製ジョイントシステムを作成します。
+- 二足キャラクターの腕と脚に対応しています。
+- 四足キャラクターの前脚と後脚に対応しています。
+- 二足リム用のIKハンドルを作成します。
+- 四足リム用に、spring、RP、SC IKハンドルを使用したIKセットアップを作成します。
+- FKコントローラーをFKジョイントへ接続します。
+- matrixノード、decomposeMatrixノード、pairBlendノードを使用してIK/FKブレンドセットアップを作成します。
+- IK/FKスイッチ属性をIK・FKコントローラーの表示切り替えに接続します。
+- リグ作成前に必要な検証を行います。
 
-- Builds IK and FK duplicate joint systems from a selected bind/source limb chain.
-- Supports biped arms and legs.
-- Supports quadruped front and rear limbs.
-- Creates IK handles for biped limbs.
-- Creates a quadruped IK setup using spring, RP, and SC IK handles.
-- Connects FK controls to FK joints.
-- Creates IK/FK blend setup using matrix nodes, decomposeMatrix nodes, and pairBlend nodes.
-- Connects the IK/FK switch attribute to IK and FK controller visibility.
-- Performs validation before building the rig.
-
-## Software / Environment
+## ソフトウェア／環境
 
 - Autodesk Maya 2025
 - Python 3
 - maya.cmds
 
-## What This Tool Does
+## このツールが行うこと
 
-The tool takes an existing limb joint chain and existing controllers, then builds the IK/FK rig system around them.
+このツールは、既存のリムジョイントチェーンと既存のコントローラーを使用し、その周囲にIK/FKリグシステムを構築します。
 
-For a biped limb, it creates:
+二足リムの場合、以下を作成します。
 
-- IK joint chain
-- FK joint chain
-- IK handle
-- FK controller constraints
-- IK/FK blend nodes
-- IK/FK controller visibility switching
+- IKジョイントチェーン
+- FKジョイントチェーン
+- IKハンドル
+- FKコントローラーのコンストレイント
+- IK/FKブレンド用ノード
+- IK/FKコントローラーの表示切り替え
 
-For a quadruped limb, it creates:
+四足リムの場合、以下を作成します。
 
-- driver joint chain
-- IK joint chain
-- FK joint chain
-- spring solver IK handle
-- RP solver IK handle
-- SC solver IK handles
-- FK controller constraints
-- IK/FK blend nodes
-- IK/FK controller visibility switching
+- driverジョイントチェーン
+- IKジョイントチェーン
+- FKジョイントチェーン
+- spring solver IKハンドル
+- RP solver IKハンドル
+- SC solver IKハンドル
+- FKコントローラーのコンストレイント
+- IK/FKブレンド用ノード
+- IK/FKコントローラーの表示切り替え
 
-## What This Tool Does Not Do
+## このツールが行わないこと
 
-- It does not create controllers.
-- It does not create the original bind/source skeleton.
-- It does not skin the character.
-- It does not create the IK/FK switch controller.
-- It does not add the `IKFKswitch` attribute.
-- It does not automatically decide which branch to follow when a joint has multiple children.
-- It does not currently provide an undo/cleanup tool for deleting generated rig systems.
+- コントローラーは作成しません。
+- 元となるバインド／ソーススケルトンは作成しません。
+- キャラクターのスキニングは行いません。
+- IK/FKスイッチコントローラーは作成しません。
+- `IKFKswitch` 属性は追加しません。
+- 1つのジョイントに複数の子ジョイントがある場合、どの分岐を使用するかを自動判定しません。
+- 現時点では、生成されたリグシステムを削除するためのUndo／Cleanup専用ツールはありません。
 
-## How to Use
+## 使用方法
 
-1. Open Maya.
-2. Open the script in the Script Editor or load it into Maya's Python environment.
-3. Run:
+1. Mayaを開きます。
+2. スクリプトをScript Editorで開く、またはMayaのPython環境へロードします。
+3. 以下を実行します。
 
 ```python
 metaTools_AutoLimbRigger_v02.openUI()
 ```
 
-4. In the UI, choose:
-   - Rig Type: `Biped` or `Quadruped`
+4. UIで以下を選択します。
+   - Rig Type: `Biped` または `Quadruped`
    - Limb Type:
-     - Biped: `Arm` or `Leg`
-     - Quadruped: `Front` or `Rear`
-   - Limb Side: `L` or `R`
-5. Select the root joint of the limb chain.
-6. Press **Build Rig**.
+     - Biped: `Arm` または `Leg`
+     - Quadruped: `Front` または `Rear`
+   - Limb Side: `L` または `R`
+5. リムチェーンのルートジョイントを選択します。
+6. **Build Rig** を押します。
 
-## Required Scene Setup
+## 必要なシーンセットアップ
 
-Before running the tool, the scene must already contain:
+ツールを実行する前に、シーン内に以下が既に存在している必要があります。
 
-- A clean source/bind limb joint chain.
-- IK controllers with the expected names.
-- FK controllers with the expected names.
-- FK controller offset groups named with `_off` suffix.
-- An IK/FK switch controller.
-- A numeric `IKFKswitch` attribute on the switch controller.
+- クリーンなソース／バインド用リムジョイントチェーン
+- 想定された名前のIKコントローラー
+- 想定された名前のFKコントローラー
+- `_off` サフィックス付きのFKコントローラー用オフセットグループ
+- IK/FKスイッチコントローラー
+- スイッチコントローラー上の数値属性 `IKFKswitch`
 
-The `IKFKswitch` attribute must:
+`IKFKswitch` 属性は以下を満たす必要があります。
 
-- Be named exactly `IKFKswitch`.
-- Be on a controller named like `L_Arm_IKFKswitch_ctrl`.
-- Be a float/double attribute.
-- Have a value range of `0` to `1`.
+- 属性名は正確に `IKFKswitch` であること
+- `L_Arm_IKFKswitch_ctrl` のような名前のコントローラー上に存在すること
+- floatまたはdouble属性であること
+- 値の範囲が `0` から `1` であること
 
-Current switch meaning:
+現在のスイッチの意味は以下です。
 
 | Value | Mode |
 |---:|---|
 | `0` | IK |
 | `1` | FK |
 
-## Supported Limb Types
+## 対応リムタイプ
 
 | Rig Type | Limb Type | Source Chain Length | Blend Joint Count |
 |---|---|---:|---:|
@@ -111,20 +110,20 @@ Current switch meaning:
 | Quadruped | Front | 5 | 4 |
 | Quadruped | Rear | 5 | 4 |
 
-The biped leg reads 5 source joints so the foot/toe chain can be included for IK handle creation, but only 3 main limb joints are blended by the IK/FK system.
+二足脚では、IKハンドル作成のために足・つま先を含む5つのソースジョイントを読み込みますが、IK/FKシステムでブレンドされるのは主要な3ジョイントのみです。
 
-## Generated Joint Systems
+## 生成されるジョイントシステム
 
 ### Biped
 
-The tool creates:
+ツールは以下を作成します。
 
 ```text
 source_joint_IK
 source_joint_FK
 ```
 
-Example:
+例:
 
 ```text
 L_shoulder
@@ -134,7 +133,7 @@ L_shoulder_FK
 
 ### Quadruped
 
-The tool creates:
+ツールは以下を作成します。
 
 ```text
 source_joint_driver
@@ -142,7 +141,7 @@ source_joint_IK
 source_joint_FK
 ```
 
-Example:
+例:
 
 ```text
 L_humerus
@@ -151,46 +150,46 @@ L_humerus_IK
 L_humerus_FK
 ```
 
-## IK/FK Blending Method
+## IK/FKブレンド方式
 
-For each blended bind/source joint, the tool creates:
+ブレンド対象の各バインド／ソースジョイントに対して、ツールは以下を作成します。
 
-- an offset group named `sourceJoint_IKFK_off`
-- IK `multMatrix`
-- IK `decomposeMatrix`
-- FK `multMatrix`
-- FK `decomposeMatrix`
-- `pairBlend` node
+- `sourceJoint_IKFK_off` という名前のオフセットグループ
+- IK用 `multMatrix`
+- IK用 `decomposeMatrix`
+- FK用 `multMatrix`
+- FK用 `decomposeMatrix`
+- `pairBlend` ノード
 
-The IK and FK joint transforms are converted into the local space of the blend offset group. Their translate and rotate outputs are then blended through a `pairBlend` node. The blend offset group drives the original source/bind joint through a parentConstraint.
+IKジョイントとFKジョイントのトランスフォームは、ブレンド用オフセットグループのローカル空間へ変換されます。そのtranslateとrotate出力を `pairBlend` ノードでブレンドします。ブレンド用オフセットグループはparentConstraintを通して元のソース／バインドジョイントを駆動します。
 
-The `pairBlend.rotInterpolation` is set to quaternion mode.
+`pairBlend.rotInterpolation` はクォータニオンモードに設定されます。
 
-## Important Assumptions
+## 重要な前提条件
 
-- The selected root joint must match the UI side and limb type.
-- Left side names must start with `L_`.
-- Right side names must start with `R_`.
-- Biped arm root must end with `_shoulder`.
-- Biped leg root must end with `_hip`.
-- Quadruped front root must end with `_humerus`.
-- Quadruped rear root must end with `_femur`.
-- Existing controllers must already be aligned to the joints.
-- FK controller offset groups must use the `_off` suffix.
-- Generated node names must not already exist in the scene.
-- The first child joint is used when a joint has multiple children.
+- 選択したルートジョイントは、UIで選択したsideとlimb typeに一致している必要があります。
+- 左側の名前は `L_` で始まる必要があります。
+- 右側の名前は `R_` で始まる必要があります。
+- 二足腕のルートは `_shoulder` で終わる必要があります。
+- 二足脚のルートは `_hip` で終わる必要があります。
+- 四足前脚のルートは `_humerus` で終わる必要があります。
+- 四足後脚のルートは `_femur` で終わる必要があります。
+- 既存のコントローラーはジョイントに合わせて配置されている必要があります。
+- FKコントローラーのオフセットグループは `_off` サフィックスを使用する必要があります。
+- 生成されるノード名は、シーン内に既に存在していてはいけません。
+- 1つのジョイントに複数の子がある場合、最初の子ジョイントを使用します。
 
-## Current Limitations
+## 現在の制限事項
 
-- Built with `maya.cmds` only.
-- The tool currently expects strict naming conventions.
-- Controllers must already exist before running the tool.
-- FK controller alignment issues are intentionally exposed because FK constraints use `maintainOffset=False`.
-- Branching joint chains are not interactively selectable yet; the tool warns and follows the first child.
-- Existing generated joints or nodes with the same names will stop the build.
-- The code is currently stored mostly in one script file.
-- There is no automatic rollback if the build fails halfway.
-- There is no dedicated UI for deleting or rebuilding an existing generated limb rig yet.
+- `maya.cmds` のみで構築されています。
+- 現在のツールは厳密な命名規則を前提としています。
+- コントローラーはツール実行前に既に存在している必要があります。
+- FKコンストレイントでは `maintainOffset=False` を使用するため、FKコントローラーのアライメント問題は意図的に露出します。
+- 分岐のあるジョイントチェーンは、まだインタラクティブに選択できません。ツールは警告を出し、最初の子を使用します。
+- 同名の生成済みジョイントまたはノードが既に存在する場合、ビルドは停止します。
+- コードは現在、主に1つのスクリプトファイル内に保存されています。
+- ビルドが途中で失敗した場合の自動ロールバックはありません。
+- 生成済みリムリグを削除または再構築するための専用UIはまだありません。
 
 ## Author
 
