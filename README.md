@@ -194,5 +194,5 @@ The `pairBlend.rotInterpolation` is set to quaternion mode.
 
 ## Author
 
-KhantArkarZwe — Rigging / Technical Artist
+KhantArkarZwe — Rigging / Technical Artist\
 Gmail: khantarkarzwe@gmail.com
